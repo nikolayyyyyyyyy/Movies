@@ -5,7 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ActorController;
 
+Route::resource('actors', ActorController::class)
+    ->middleware(['auth', 'verified']);
 Route::resource('movies', MovieController::class)
     ->middleware(['auth', 'verified']);
 

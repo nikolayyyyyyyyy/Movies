@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Actor;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -36,6 +37,18 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Thriller']
         ];
         Category::insert($categories);
+
+        $actors = [
+            [
+                'name' => 'Robert De Niro',
+                'profile_picture' => 'actor_pictures/deniro.jpg',
+            ],
+            [
+                'name' => 'Al Pacino',
+                'profile_picture' => 'actor_pictures/pacino.jpg',
+            ],
+        ];
+        Actor::insert($actors);
 
         $users = [
             [

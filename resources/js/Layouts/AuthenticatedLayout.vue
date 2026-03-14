@@ -33,8 +33,13 @@ const categories = ref(page.props.categories ?? []);
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink :href="route('movies.create')" :active="route().current('movies.create')">
+                                <NavLink v-if="$page.props.auth.user.role_id == 1" :href="route('movies.create')"
+                                    :active="route().current('movies.create')">
                                     Create
+                                </NavLink>
+
+                                <NavLink :href="route('movies.index')" :active="route().current('movies.index')">
+                                    Movies
                                 </NavLink>
 
                                 <NavLink v-for="category in categories"
