@@ -16,12 +16,6 @@ class ActorService
             $actors = Actor::all();
         }
 
-        return collect($actors)->map(function ($actor) {
-            return [
-                'id' => $actor->id,
-                'name' => $actor->name,
-                'profile_picture' => asset('storage/' . $actor->profile_picture),
-            ];
-        })->all();
+        return $actors;
     }
 }

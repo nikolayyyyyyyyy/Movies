@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Movie extends Model
 {
@@ -18,6 +19,21 @@ class Movie extends Model
         'year',
         'duration',
     ];
+
+    public function casts(): array
+    {
+        return [
+            'rating' => 'float',
+            'year' => 'integer'
+        ];
+    }
+
+    protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => asset($value),
+        );
+    }
 
     public function actors(): BelongsToMany
     {
