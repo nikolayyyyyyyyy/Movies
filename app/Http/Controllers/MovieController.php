@@ -18,7 +18,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movies = Movie::with('categories', 'actors')->get();
+        $movies = Movie::with('categories', 'actors')->paginate(4);
         return Inertia::render('Movies/Index', [
             'movies' => $movies,
         ]);

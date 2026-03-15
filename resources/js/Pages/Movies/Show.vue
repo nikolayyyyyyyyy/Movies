@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import Star from '@/Icons/Star.vue';
 defineProps({
     movie: Object,
 });
@@ -29,9 +30,16 @@ const showAdditionalInfo = ref('description');
 
                     <div class="flex flex-col gap-2 p-4 rounded-md bg-white shadow-sm">
                         <p class="text-sm text-gray-500">Year: {{ movie.year }}</p>
-                        <p class="text-sm text-gray-500">Rating: {{ movie.rating }} *</p>
-                        <p class="text-sm text-gray-500">Duration: {{ movie.duration }}</p>
-                        <p class="text-sm text-gray-500">Categories: {{ movie.categories.map(category => category.name).join(', ') }}</p>
+                        <div class="flex items-center gap-1">
+                            <p class="text-sm text-gray-500">Rating: {{ movie.rating }}</p>
+                            <Star class="w-4 h-4" />
+                        </div>
+                        <p class="text-sm text-gray-500">
+                            Duration: {{ movie.duration }} (h:mm)
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Categories: {{movie.categories.map(category => category.name).join(',')}}
+                        </p>
                     </div>
                 </div>
 

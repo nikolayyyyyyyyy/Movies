@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description')->max(500)->nullable();
+            $table->text('description')->max(1500)->nullable();
             $table->string('image');
             $table->string('iframe_url');
             $table->string('rating')->nullable();

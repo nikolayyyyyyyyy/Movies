@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 defineProps({
     movies: Array,
 });
@@ -20,14 +20,36 @@ defineProps({
         <div class="py-6 sm:py-12">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                    <div v-for="movie in movies" :key="movie.id" class="flex flex-col cursor-pointer"
-                        @click="router.visit(route('movies.show', movie.id))">
+                    <div v-if="movies.data.length > 0" v-for="movie in movies.data" :key="movie.id"
+                        class="flex flex-col cursor-pointer" @click="router.visit(route('movies.show', movie.id))">
                         <div class="flex flex-col">
-                            <img :src="movie.image" alt="Movie Image" class="rounded-md">
+                            <img :src="movie.image" alt="Movie Image" class="h-80 w-full rounded-md object-cover">
                             <h3 class="text-lg font-bold text-center">{{ movie.title }}</h3>
                         </div>
                     </div>
+
+                    <div v-else>
+                        <p class="text-center text-gray-500">No movies found</p>
+                    </div>
                 </div>
+
+                <!-- Pagination -->
+                <nav v-if="movies.links.length > 0" class="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
+                    <template v-for="(link, index) in movies.links" :key="index">
+                        <Link
+                            v-if="link.url"
+                            :href="link.url"
+                            class="min-w-[2.25rem] px-3 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm transition-colors hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+                            :class="{ 'bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700 hover:border-indigo-700': link.active }"
+                            v-html="link.label"
+                        />
+                        <span
+                            v-else
+                            class="min-w-[2.25rem] px-3 py-2 text-sm font-medium rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
+                            v-html="link.label"
+                        />
+                    </template>
+                </nav>
             </div>
         </div>
     </AuthenticatedLayout>
