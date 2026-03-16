@@ -42,11 +42,11 @@ const categories = ref(page.props.categories ?? []);
                                     Movies
                                 </NavLink>
 
-                                <!-- <NavLink v-for="category in categories"
+                                <NavLink v-for="category in categories"
                                     :href="route('movies.index', { category: category.id })"
                                     :active="route().current('movies.index', { category: category.id })">
                                     {{ category.name }}
-                                </NavLink> -->
+                                </NavLink>
                             </div>
                         </div>
 
