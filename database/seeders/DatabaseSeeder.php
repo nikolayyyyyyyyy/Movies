@@ -27,23 +27,21 @@ class DatabaseSeeder extends Seeder
         Role::insert($roles);
 
         $categories = [
-            ['name' => 'Action'],
-            ['name' => 'Adventure'],
-            ['name' => 'Comedy'],
-            ['name' => 'Drama'],
-            ['name' => 'Fantasy'],
-            ['name' => 'Horror'],
-            ['name' => 'Mystery'],
-            ['name' => 'Romance'],
-            ['name' => 'Thriller'],
-            ['name' => 'Sci-Fi (Science Fiction)'],
-            ['name' => 'Fantasy'],
-            ['name' => 'Mystery'],
-            ['name' => 'Crime'],
-            ['name' => 'Animation'],
-            ['name' => 'Family'],
-            ['name' => 'Historical'],
-            ['name' => 'Biography']
+    ['name' => 'Action'],
+    ['name' => 'Adventure'],
+    ['name' => 'Comedy'],
+    ['name' => 'Drama'],
+    ['name' => 'Fantasy'],
+    ['name' => 'Horror'],
+    ['name' => 'Mystery'],
+    ['name' => 'Romance'],
+    ['name' => 'Thriller'],
+    ['name' => 'Sci-Fi (Science Fiction)'],
+    ['name' => 'Crime'],
+    ['name' => 'Animation'],
+    ['name' => 'Family'],
+    ['name' => 'Historical'],
+    ['name' => 'Biography'],
         ];
         Category::insert($categories);
 
