@@ -17,25 +17,14 @@ class MovieController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $categoryId = $request->category;
+    {
+        $movies = Movie::with(['categories', 'actors'])
+            ->paginate(10);
 
-    $movies = \App\Models\Movie::with(['categories', 'actors'])
-        ->when($categoryId, function ($query) use ($categoryId) {
-            $query->whereHas('categories', function ($q) use ($categoryId) {
-                $q->where('categories.id', $categoryId);
-            });
-        })
-        ->paginate(10)
-        ->withQueryString();
-
-    return \Inertia\Inertia::render('Movies/Index', [
-        'movies' => $movies,
-        'filters' => [
-            'category' => $categoryId,
-        ],
-    ]);
-}
+        return Inertia::render('Movies/Index', [
+            'movies' => $movies
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -43,38 +43,27 @@ const categories = ref(page.props.categories ?? []);
                                 </NavLink>
 
                                 <Dropdown align="left" width="48">
-        <template #trigger>
-                <button
-                                    type="button"
-                                    class="inline-flex h-16 items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out hover:border-gray-300 hover:text-gray-700 focus:outline-none"
-                                    >
-                                    Categories
+                                    <template #trigger>
+                                        <button type="button"
+                                            class="inline-flex h-16 items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out hover:border-gray-300 hover:text-gray-700 focus:outline-none">
+                                            Categories
 
-                        <svg
-                                class="ms-1 h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                        >           
-                            <path
-                                fill-rule="evenodd"
-                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                </button>
-    </template>
+                                            <svg class="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </template>
 
-    <template #content>
-        <DropdownLink
-            v-for="category in categories"
-            :key="category.id"
-            :href="route('movies.index', { category: category.id })"
-        >
-            {{ category.name }}
-        </DropdownLink>
-    </template>
-</Dropdown>
+                                    <template #content>
+                                        <DropdownLink v-for="category in categories" :key="category.id"
+                                            :href="route('movies.index', { category: category.id })">
+                                            {{ category.name }}
+                                        </DropdownLink>
+                                    </template>
+                                </Dropdown>
                             </div>
                         </div>
 
