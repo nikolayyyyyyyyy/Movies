@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import Star from '@/Icons/Star.vue';
 defineProps({
@@ -29,14 +29,28 @@ const showAdditionalInfo = ref('description');
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
                     <div class="flex flex-col gap-2 p-4 rounded-md bg-white shadow-sm">
+                        <Link :href="route('users.show', movie.user.id)" class="flex items-center gap-2">
+                            <img src="/avatar.png" alt="Avatar" class="w-10 h-10 rounded-full">
+
+                            <div class="flex flex-col">
+                                <p class="text-sm font-medium text-gray-700">{{ movie.user.name }}</p>
+
+                                <p class="text-sm text-gray-500">{{ movie.user.email }}</p>
+                            </div>
+                        </Link>
+
                         <p class="text-sm text-gray-500">Year: {{ movie.year }}</p>
+
                         <div class="flex items-center gap-1">
                             <p class="text-sm text-gray-500">Rating: {{ movie.rating }}</p>
+
                             <Star class="w-4 h-4" />
                         </div>
+
                         <p class="text-sm text-gray-500">
                             Duration: {{ movie.duration }} (h:mm)
                         </p>
+
                         <p class="text-sm text-gray-500">
                             Categories: {{movie.categories.map(category => category.name).join(',')}}
                         </p>
@@ -52,6 +66,7 @@ const showAdditionalInfo = ref('description');
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'">
                             Description
                         </button>
+
                         <button @click="showAdditionalInfo = 'actors'" type="button"
                             class="px-4 py-2.5 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                             :class="showAdditionalInfo === 'actors'
@@ -75,6 +90,7 @@ const showAdditionalInfo = ref('description');
                                     <img :src="actor.profile_picture" :alt="actor.name"
                                         class="h-full w-full object-cover">
                                 </div>
+
                                 <p class="text-sm font-medium text-gray-700 line-clamp-2 min-h-[2.5rem]">
                                     {{ actor.name }}
                                 </p>

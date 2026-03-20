@@ -5,21 +5,25 @@ import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     movies: Object,
+    user: Object,
 });
 </script>
 <template>
 
-    <Head title="Movies" />
-
+    <Head title="User" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                All Movies
-            </h2>
+            <div class="flex items-center gap-2">
+                <img src="/avatar.png" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                    {{ user.name }}
+                </h2>
+            </div>
         </template>
 
         <div class="py-6 sm:py-12">
             <div v-if="movies.data.length > 0" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                     <MovieCard v-for="movie in movies.data" :key="movie.id" :movie="movie" />
                 </div>

@@ -6,11 +6,16 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ActorController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 
-Route::resource('actors', ActorController::class)
-    ->middleware(['auth', 'verified']);
-Route::resource('movies', MovieController::class)
-    ->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('actors', ActorController::class);
+    Route::resource('movies', MovieController::class);
+    Route::resource('categories', CategoryController::class)
+        ->scoped(['category' => 'slug']);
+    Route::resource('users', UserController::class);
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

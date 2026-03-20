@@ -1,25 +1,25 @@
 <script setup>
 import MovieCard from '@/Components/MovieCard.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 
 defineProps({
     movies: Object,
+    category: Object,
 });
 </script>
+
 <template>
-
-    <Head title="Movies" />
-
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                All Movies
+                {{ category.name }}
             </h2>
         </template>
 
         <div class="py-6 sm:py-12">
             <div v-if="movies.data.length > 0" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                     <MovieCard v-for="movie in movies.data" :key="movie.id" :movie="movie" />
                 </div>

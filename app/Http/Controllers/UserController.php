@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Inertia\Inertia;
 
-class CategoryController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,20 +35,19 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(User $user)
     {
-        $movies = $category->movies()->paginate(8);
-
-        return Inertia::render('Category/Index', [
+        $movies = $user->movies()->paginate(8);
+        return Inertia::render('User/Show', [
             'movies' => $movies,
-            'category' => $category
+            'user' => $user
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(User $user)
     {
         //
     }
@@ -56,7 +55,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -64,7 +63,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(User $user)
     {
         //
     }

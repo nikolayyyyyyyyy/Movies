@@ -59,7 +59,7 @@ const categories = ref(page.props.categories ?? []);
 
                                     <template #content>
                                         <DropdownLink v-for="category in categories" :key="category.id"
-                                            :href="route('movies.index', { category: category.id })">
+                                            :href="route('categories.show', category.slug)">
                                             {{ category.name }}
                                         </DropdownLink>
                                     </template>

@@ -19,7 +19,7 @@ class MovieController extends Controller
     public function index(Request $request)
     {
         $movies = Movie::with(['categories', 'actors'])
-            ->paginate(10);
+            ->paginate(8);
 
         return Inertia::render('Movies/Index', [
             'movies' => $movies
@@ -67,7 +67,7 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $movie = Movie::with('categories', 'actors')->find($movie->id);
+        $movie = Movie::with('categories', 'actors', 'user')->find($movie->id);
         return Inertia::render('Movies/Show', [
             'movie' => $movie,
         ]);

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('rating')->nullable();
             $table->string('year')->nullable();
             $table->string('duration');
+            $table->foreignId('user_id')->constrained('users');
+            $table->softDeletes();
         });
     }
 
