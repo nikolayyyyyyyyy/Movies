@@ -76,8 +76,8 @@ class ProfileController extends Controller
         $request->user()->update([
             'profile_picture' => $request->file('profile_picture')->store('profile_pictures', 'public'),
         ]);
+        $request->user()->refresh();
 
-        return redirect()
-            ->back();
+        return redirect()->route('profile.edit');
     }
 }

@@ -1,10 +1,11 @@
 <script setup>
 import { useForm, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
-const user = usePage().props.auth.user;
+const page = usePage();
 
+const user = computed(() => page.props.auth.user);
 const profilePicture = ref(null);
 const form = useForm({
     profile_picture: null,
@@ -21,7 +22,6 @@ const handleProfilePictureChange = (e) => {
 
 const updateProfilePicture = () => {
     form.put(route('profile.update-profile-picture'), {
-        preserveState: false,
         onSuccess: () => {
             profilePicture.value = null;
             form.reset('profile_picture');
@@ -70,7 +70,7 @@ const updateProfilePicture = () => {
 
             <Transition enter-active-class="transition ease-in-out" enter-from-class="opacity-0"
                 leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
-                <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
+                <p v-if="form.recentlySuccessful" class="text-sm text-green-600">
                     Saved.
                 </p>
             </Transition>
