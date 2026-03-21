@@ -64,6 +64,14 @@ const showAdditionalInfo = ref('description');
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'">
                             Actors
                         </button>
+
+                        <button @click="showAdditionalInfo = 'comments'" type="button"
+                            class="px-4 py-2.5 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                            :class="showAdditionalInfo === 'comments'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'">
+                            Comments
+                        </button>
                     </div>
 
                     <div class="mt-1 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -85,6 +93,10 @@ const showAdditionalInfo = ref('description');
                                     {{ actor.name }}
                                 </p>
                             </div>
+                        </div>
+
+                        <div v-if="showAdditionalInfo === 'comments'">
+                            Comments will be added soon.
                         </div>
                     </div>
                 </div>

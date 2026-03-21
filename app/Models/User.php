@@ -63,6 +63,11 @@ class User extends Authenticatable
         return $this->hasMany(Movie::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     protected function profilePicture(): Attribute
     {
         return Attribute::make(
