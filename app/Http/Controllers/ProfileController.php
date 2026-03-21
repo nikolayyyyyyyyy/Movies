@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UpdateUserProfilePictureRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -59,5 +61,23 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Update the user's profile picture.
+     */
+    public function updateProfilePicture(UpdateUserProfilePictureRequest $request): RedirectResponse
+    {
+        if ($request->user()->profile_picture) {
+            $path = $request->user()->getRawOriginal('profile_picture');
+            Storage::disk('public')->delete($path);
+        }
+
+        $request->user()->update([
+            'profile_picture' => $request->file('profile_picture')->store('profile_pictures', 'public'),
+        ]);
+
+        return redirect()
+            ->back();
     }
 }

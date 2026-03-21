@@ -29,16 +29,6 @@ const showAdditionalInfo = ref('description');
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
                     <div class="flex flex-col gap-2 p-4 rounded-md bg-white shadow-sm">
-                        <Link :href="route('users.show', movie.user.id)" class="flex items-center gap-2">
-                            <img src="/avatar.png" alt="Avatar" class="w-10 h-10 rounded-full">
-
-                            <div class="flex flex-col">
-                                <p class="text-sm font-medium text-gray-700">{{ movie.user.name }}</p>
-
-                                <p class="text-sm text-gray-500">{{ movie.user.email }}</p>
-                            </div>
-                        </Link>
-
                         <p class="text-sm text-gray-500">Year: {{ movie.year }}</p>
 
                         <div class="flex items-center gap-1">

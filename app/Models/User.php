@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'profile_picture',
         'password',
         'role_id',
     ];
@@ -59,5 +61,12 @@ class User extends Authenticatable
     public function movies(): HasMany
     {
         return $this->hasMany(Movie::class);
+    }
+
+    protected function profilePicture(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value ? asset('storage/' . $value) : null,
+        );
     }
 }

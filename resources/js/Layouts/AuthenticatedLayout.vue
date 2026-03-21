@@ -134,6 +134,13 @@ const categories = ref(page.props.categories ?? []);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="$page.props.auth.user.role_id == 1" :href="route('movies.create')"
+                            :active="route().current('movies.create')">
+                            Create
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('movies.index')" :active="route().current('movies.index')">
+                            Movies
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->

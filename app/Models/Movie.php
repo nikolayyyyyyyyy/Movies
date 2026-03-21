@@ -13,6 +13,7 @@ class Movie extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'image',
         'iframe_url',
@@ -20,6 +21,11 @@ class Movie extends Model
         'year',
         'duration',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     public function casts(): array
     {

@@ -24,6 +24,7 @@ class StoreMovieRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
+            'slug' => 'required|unique:movies,slug',
             'description' => 'nullable|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'iframe_url' => 'required|url',
@@ -32,26 +33,6 @@ class StoreMovieRequest extends FormRequest
             'duration' => 'required',
             'categories' => 'required|array',
             'actors' => 'nullable|array',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'title.required' => 'The title is required',
-            'title.max' => 'The title must be less than 255 characters',
-            'description.max' => 'The description must be less than 500 characters',
-            'image.image' => 'The image must be an image',
-            'image.mimes' => 'The image must be a jpeg, png, jpg, gif, or svg',
-            'image.max' => 'The image must be less than 2048 kilobytes',
-            'iframe_url.required' => 'The iframe url is required',
-            'iframe_url.url' => 'The iframe url must be a valid url',
-            'rating.numeric' => 'The rating must be a number',
-            'rating.min' => 'The rating must be greater than 0',
-            'rating.max' => 'The rating must be less than 10',
-            'year.numeric' => 'The year must be a number',
-            'year.min' => 'The year must be greater than 1900',
-            'duration.required' => 'The duration is required',
         ];
     }
 }

@@ -11,7 +11,8 @@ use App\Http\Controllers\UserController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('actors', ActorController::class);
-    Route::resource('movies', MovieController::class);
+    Route::resource('movies', MovieController::class)
+        ->scoped(['movie' => 'slug']);
     Route::resource('categories', CategoryController::class)
         ->scoped(['category' => 'slug']);
     Route::resource('users', UserController::class);
@@ -31,9 +32,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+    Route::put('/profile/update-profile-picture', [ProfileController::class, 'updateProfilePicture'])
+        ->name('profile.update-profile-picture');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 require __DIR__ . '/auth.php';

@@ -15,7 +15,7 @@ const props = defineProps({
 const showDeleteModal = ref(false);
 
 const confirmDelete = () => {
-    router.delete(route('movies.destroy', props.movie.id), {
+    router.delete(route('movies.destroy', props.movie.slug), {
         onFinish: () => {
             showDeleteModal.value = false;
         },
@@ -24,7 +24,7 @@ const confirmDelete = () => {
 </script>
 
 <template>
-    <div class="flex cursor-pointer flex-col relative" @click="router.visit(route('movies.show', movie.id))">
+    <div class="flex cursor-pointer flex-col relative" @click="router.visit(route('movies.show', movie.slug))">
         <PrimaryButton v-if="$page.props.auth.user.role_id == 1" class="absolute bg-red-500 text-white top-2 right-2"
             @click.stop.prevent="showDeleteModal = true">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

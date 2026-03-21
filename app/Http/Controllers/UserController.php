@@ -37,11 +37,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $movies = $user->movies()->paginate(8);
-        return Inertia::render('User/Show', [
-            'movies' => $movies,
-            'user' => $user
-        ]);
+        //
     }
 
     /**

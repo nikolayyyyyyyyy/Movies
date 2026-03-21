@@ -47,6 +47,7 @@ class MovieController extends Controller
         return DB::transaction(function () use ($request) {
             $movie = Movie::create([
                 'title' => $request->title,
+                'slug' => $request->slug,
                 'description' => $request->description,
                 'image' => $request->hasFile('image') ? $request->file('image')->store('movies_images', 'public') : null,
                 'iframe_url' => $request->iframe_url,

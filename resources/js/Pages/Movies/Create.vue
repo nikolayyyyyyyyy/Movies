@@ -18,6 +18,7 @@ defineProps({
 
 const createMovie = useForm({
     title: '',
+    slug: '',
     description: '',
     image: '',
     iframe_url: '',
@@ -81,6 +82,12 @@ const searchActors = () => {
                             </div>
 
                             <div class="flex flex-col gap-1">
+                                <InputLabel for="slug" value="Slug" />
+                                <TextInput id="slug" v-model="createMovie.slug" class="w-full" />
+                                <InputError :message="createMovie.errors.slug" />
+                            </div>
+
+                            <div class="flex flex-col gap-1">
                                 <InputLabel for="description" value="Description" />
                                 <textarea rows="5" name="description" id="description" v-model="createMovie.description"
                                     class="w-full resize-none rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
@@ -89,26 +96,21 @@ const searchActors = () => {
 
                             <div class="flex flex-col gap-1">
                                 <InputLabel for="picture" value="Picture" />
-                                <div class="flex w-full items-stretch gap-3 rounded-md border border-gray-300 bg-white p-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+                                <div
+                                    class="flex w-full items-stretch gap-3 rounded-md border border-gray-300 bg-white p-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
                                     <File class="h-20 w-16 flex-shrink-0 text-gray-400 sm:w-20" />
                                     <div class="flex min-w-0 flex-1 flex-col justify-center gap-1">
                                         <div v-if="!selectedFileName" class="flex min-h-[2rem] w-full items-center">
-                                            <input
-                                                ref="pictureInput"
-                                                id="picture"
-                                                type="file"
-                                                accept="image/*"
+                                            <input ref="pictureInput" id="picture" type="file" accept="image/*"
                                                 class="min-w-0 flex-1 border-0 bg-transparent p-0 text-sm file:mr-2 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-gray-700 focus:ring-0"
-                                                @change="onPictureChange"
-                                            />
+                                                @change="onPictureChange" />
                                         </div>
                                         <template v-else>
-                                            <span class="truncate text-sm font-medium text-gray-700">{{ selectedFileName }}</span>
-                                            <button
-                                                type="button"
+                                            <span class="truncate text-sm font-medium text-gray-700">{{ selectedFileName
+                                                }}</span>
+                                            <button type="button"
                                                 class="w-fit text-sm text-indigo-600 hover:text-indigo-500"
-                                                @click="clearPicture"
-                                            >
+                                                @click="clearPicture">
                                                 Change
                                             </button>
                                         </template>
