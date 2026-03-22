@@ -24,7 +24,7 @@ defineProps({
     <Head title="Welcome" />
 
     <div
-        class="fixed inset-0 z-0 box-border overflow-x-hidden overflow-y-auto bg-gray-50 text-black/50 dark:bg-black dark:text-white/50"
+        class="fixed inset-0 z-0 box-border overflow-x-hidden overflow-y-hidden bg-gray-50 text-black/50 dark:bg-black dark:text-white/50"
     >
         <img id="background" class="pointer-events-none absolute -left-20 top-0 max-w-[877px] select-none"
             src="https://laravel.com/assets/img/welcome/background.svg" alt="" />

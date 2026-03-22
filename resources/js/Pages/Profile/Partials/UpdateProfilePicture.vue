@@ -45,7 +45,7 @@ const updateProfilePicture = () => {
             </header>
 
             <div class="flex flex-col items-center gap-4">
-                <img :src="user.profile_picture ?? '/avatar.png'" alt="Profile Picture"
+                <img :src="user.profile_picture ?? '/images/avatar.png'" alt="Profile Picture"
                     class="w-20 h-20 md:w-[120px] md:h-[120px] object-cover rounded-md">
 
                 <input @change="handleProfilePictureChange" type="file" id="profile_picture" name="profile_picture"
