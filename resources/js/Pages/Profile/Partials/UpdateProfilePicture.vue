@@ -24,7 +24,7 @@ const updateProfilePicture = () => {
     form.put(route('profile.update-profile-picture'), {
         onSuccess: () => {
             profilePicture.value = null;
-            form.reset('profile_picture');
+            form.reset();
         }
     });
 };

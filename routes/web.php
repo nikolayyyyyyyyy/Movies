@@ -7,15 +7,20 @@ use Inertia\Inertia;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ActorController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('actors', ActorController::class);
     Route::resource('movies', MovieController::class)
         ->scoped(['movie' => 'slug']);
     Route::resource('categories', CategoryController::class)
         ->scoped(['category' => 'slug']);
+
     Route::resource('users', UserController::class);
+    Route::resource('actors', ActorController::class);
+
+    Route::post('/comments', [CommentController::class, 'store'])
+        ->name('comments.store');
 });
 
 Route::get('/', function () {
