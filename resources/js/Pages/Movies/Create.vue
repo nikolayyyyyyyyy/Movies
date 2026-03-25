@@ -22,7 +22,6 @@ const createMovie = useForm({
     description: '',
     image: '',
     iframe_url: '',
-    rating: '',
     year: '',
     duration: '',
     categories: [],
@@ -63,15 +62,15 @@ const searchActors = () => {
     <Head title="Create Movie" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Create Movie
-            </h2>
-        </template>
-
         <div class="py-6 sm:py-12">
             <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div class="flex gap-3 border-b border-gray-200 bg-gray-50/50 px-4 py-4 sm:px-6 sm:py-4">
+                        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                            Create Movie
+                        </h2>
+                    </div>
+
                     <form id="movie-create-form" class="flex flex-col gap-6 p-4 sm:p-6 md:flex-row md:gap-8"
                         @submit.prevent="createMovie.post(route('movies.store'))">
                         <div class="flex flex-1 flex-col gap-4 md:min-w-0">
@@ -107,7 +106,7 @@ const searchActors = () => {
                                         </div>
                                         <template v-else>
                                             <span class="truncate text-sm font-medium text-gray-700">{{ selectedFileName
-                                                }}</span>
+                                            }}</span>
                                             <button type="button"
                                                 class="w-fit text-sm text-indigo-600 hover:text-indigo-500"
                                                 @click="clearPicture">
@@ -125,13 +124,7 @@ const searchActors = () => {
                                 <InputError :message="createMovie.errors.iframe_url" />
                             </div>
 
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-3">
-                                <div class="flex flex-col gap-1">
-                                    <InputLabel for="rating" value="Rating" />
-                                    <TextInput id="rating" v-model="createMovie.rating" class="w-full" />
-                                    <InputError :message="createMovie.errors.rating" />
-                                </div>
-
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-2">
                                 <div class="flex flex-col gap-1">
                                     <InputLabel for="year" value="Year" />
                                     <TextInput id="year" v-model="createMovie.year" class="w-full" />

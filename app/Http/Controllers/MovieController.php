@@ -10,6 +10,7 @@ use App\Http\Services\ActorService;
 use App\Http\Requests\StoreMovieRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class MovieController extends Controller
 {
@@ -51,7 +52,6 @@ class MovieController extends Controller
                 'description' => $request->description,
                 'image' => $request->hasFile('image') ? $request->file('image')->store('movies_images', 'public') : null,
                 'iframe_url' => $request->iframe_url,
-                'rating' => $request->rating,
                 'year' => $request->year,
                 'duration' => $request->duration,
             ]);
@@ -68,9 +68,35 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $movie = Movie::with(['categories', 'actors', 'user', 'comments.user'])->find($movie->id);
+        $movie = Movie::query()
+            ->with([
+                'categories',
+                'actors',
+                'user',
+                'comments.user',
+                'reactions' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                },
+            ])
+            ->withCount([
+                'reactions as likes_count' => function ($query) {
+                    $query->where('reaction', 'like');
+                },
+                'reactions as dislikes_count' => function ($query) {
+                    $query->where('reaction', 'dislike');
+                },
+            ])
+            ->findOrFail($movie->id);
+
+        $total = (int) $movie->likes_count + (int) $movie->dislikes_count;
+        $movie->rating = $total > 0
+            ? round(((int) $movie->likes_count / $total) * 10, 1) // 0..10
+            : 0.0;
+
+
         return Inertia::render('Movies/Show', [
             'movie' => $movie,
+            'rating' => $movie->rating
         ]);
     }
 

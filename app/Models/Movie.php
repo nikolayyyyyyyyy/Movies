@@ -18,7 +18,6 @@ class Movie extends Model
         'description',
         'image',
         'iframe_url',
-        'rating',
         'year',
         'duration',
     ];
@@ -61,5 +60,10 @@ class Movie extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(UserMovieReaction::class);
     }
 }

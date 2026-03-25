@@ -28,7 +28,6 @@ class StoreMovieRequest extends FormRequest
             'description' => 'nullable|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'iframe_url' => 'required|url',
-            'rating' => 'nullable|numeric|min:0|max:10',
             'year' => 'nullable|numeric|min:1800',
             'duration' => 'required',
             'categories' => 'required|array',

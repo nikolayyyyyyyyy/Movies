@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movies', function (Blueprint $table) {
+        Schema::create('user_movie_reactions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('description')->max(1500)->nullable();
-            $table->string('image');
-            $table->string('iframe_url');
-            $table->string('year')->nullable();
-            $table->string('duration');
             $table->foreignId('user_id')->constrained('users');
-            $table->softDeletes();
+            $table->foreignId('movie_id')->constrained('movies');
+
+            $table->unique(['user_id', 'movie_id']);
+            $table->enum('reaction', ['like', 'dislike']);
         });
     }
 
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('movies');
+        Schema::dropIfExists('user_movie_reactions');
     }
 };

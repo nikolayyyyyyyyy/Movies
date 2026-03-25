@@ -9,6 +9,7 @@ use App\Http\Controllers\ActorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserMovieReactionController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('movies', MovieController::class)
@@ -21,6 +22,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/comments', [CommentController::class, 'store'])
         ->name('comments.store');
+
+    Route::post('/user-movie-reactions', [UserMovieReactionController::class, 'store'])
+        ->name('user-movie-reactions.store');
 });
 
 Route::get('/', function () {

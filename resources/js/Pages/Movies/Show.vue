@@ -1,10 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Star from '@/Icons/Star.vue';
+import HandThumbUpSolidBold from '@/Icons/HandThumbUpSolidBold.vue';
+import HandThumbDownSolidBold from '@/Icons/HandThumbDownSolidBold.vue';
 const props = defineProps({
     movie: Object,
+    rating: Number,
 });
 
 const page = usePage();
@@ -41,16 +44,43 @@ function submitComment() {
     });
 }
 
+const likeMovie = () => {
+    router.post(
+        route('user-movie-reactions.store'),
+        { movie_id: props.movie.id, reaction: 'like' },
+        {
+            preserveScroll: true,
+            preserveState: false,
+        },
+    );
+}
+
+const dislikeMovie = () => {
+    router.post(
+        route('user-movie-reactions.store'),
+        { movie_id: props.movie.id, reaction: 'dislike' },
+        {
+            preserveScroll: true,
+            preserveState: false,
+        },
+    );
+}
+
 onMounted(() => {
     Echo.channel('movie.' + props.movie.id).listen('.comment.created', (e) => {
         if (e.comment?.id && !comments.value.some((c) => c.id === e.comment.id)) {
             comments.value.push(e.comment);
         }
     });
+
+    Echo.channel('movie_rating').listen('.rating.updated', (e) => {
+        router.reload({ only: ['rating'] });
+    });
 });
 
 onBeforeUnmount(() => {
     Echo.leave('movie.' + props.movie.id);
+    Echo.leave('movie_rating');
 });
 </script>
 <template>
@@ -72,6 +102,22 @@ onBeforeUnmount(() => {
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
+                    <div class="flex items-center gap-2  p-4 rounded-md bg-white shadow-sm justify-end">
+                        <div class="flex items-center gap-2">
+                            <p class="text-sm text-gray-500">Like</p>
+
+                            <HandThumbUpSolidBold @click="likeMovie" class="w-5 h-5 text-white cursor-pointer"
+                                :class="movie.reactions[0]?.reaction === 'like' ? 'text-green-500' : 'text-white'" />
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <p class="text-sm text-gray-500">Dislike</p>
+
+                            <HandThumbDownSolidBold @click="dislikeMovie" class="w-5 h-5 text-white cursor-pointer"
+                                :class="movie.reactions[0]?.reaction === 'dislike' ? 'text-red-500' : 'text-white'" />
+                        </div>
+                    </div>
+
                     <div class="flex flex-col gap-2 p-4 rounded-md bg-white shadow-sm">
                         <p class="text-sm">
                             Year:
@@ -84,7 +130,7 @@ onBeforeUnmount(() => {
                             <p class="text-sm">
                                 Rating:
                                 <span class="text-gray-500">
-                                    {{ movie.rating }}
+                                    {{ rating }}
                                 </span>
                             </p>
 

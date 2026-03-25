@@ -74,4 +74,9 @@ class User extends Authenticatable
             get: fn($value) => $value ? asset('storage/' . $value) : null,
         );
     }
+
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(UserMovieReaction::class);
+    }
 }
