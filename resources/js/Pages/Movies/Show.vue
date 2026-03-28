@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Star from '@/Icons/Star.vue';
 import HandThumbUpSolidBold from '@/Icons/HandThumbUpSolidBold.vue';
 import HandThumbDownSolidBold from '@/Icons/HandThumbDownSolidBold.vue';
@@ -50,7 +50,7 @@ const likeMovie = () => {
         { movie_id: props.movie.id, reaction: 'like' },
         {
             preserveScroll: true,
-            preserveState: false,
+            preserveState: false
         },
     );
 }
@@ -61,10 +61,18 @@ const dislikeMovie = () => {
         { movie_id: props.movie.id, reaction: 'dislike' },
         {
             preserveScroll: true,
-            preserveState: false,
+            preserveState: false
         },
     );
 }
+
+const isLiked = computed(() => {
+    return props.movie.reactions[0]?.reaction == 'like';
+});
+
+const isDisliked = computed(() => {
+    return props.movie.reactions[0]?.reaction == 'dislike';
+});
 
 onMounted(() => {
     Echo.channel('movie.' + props.movie.id).listen('.comment.created', (e) => {
@@ -106,15 +114,17 @@ onBeforeUnmount(() => {
                         <div class="flex items-center gap-2">
                             <p class="text-sm text-gray-500">Like</p>
 
-                            <HandThumbUpSolidBold @click="likeMovie" class="w-5 h-5 text-white cursor-pointer"
-                                :class="movie.reactions[0]?.reaction === 'like' ? 'text-green-700' : 'text-white'" />
+                            <HandThumbUpSolidBold @click="likeMovie"
+                                class="w-5 h-5 cursor-pointer transition-colors"
+                                :class="isLiked ? 'text-green-700' : 'text-gray-500 hover:text-gray-700'" />
                         </div>
 
                         <div class="flex items-center gap-2">
                             <p class="text-sm text-gray-500">Dislike</p>
 
-                            <HandThumbDownSolidBold @click="dislikeMovie" class="w-5 h-5 text-white cursor-pointer"
-                                :class="movie.reactions[0]?.reaction == 'dislike' ? 'text-red-700' : 'text-white'" />
+                            <HandThumbDownSolidBold @click="dislikeMovie"
+                                class="w-5 h-5 cursor-pointer transition-colors"
+                                :class="isDisliked ? 'text-red-700' : 'text-gray-500 hover:text-gray-700'" />
                         </div>
                     </div>
 
@@ -134,7 +144,7 @@ onBeforeUnmount(() => {
                                 </span>
                             </p>
 
-                            <Star class="w-4 h-4" />
+                            <Star class="w-4 h-4" :fill="'#f59e0b'" />
                         </div>
 
                         <p class="text-sm">

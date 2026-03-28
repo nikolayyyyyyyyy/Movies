@@ -96,7 +96,7 @@ class MovieController extends Controller
         $movie->rating = $total > 0
             ? round(((int) $movie->likes_count / $total) * 10, 1) // 0..10
             : 0.0;
-
+        
         return Inertia::render('Movies/Show', [
             'movie' => $movie,
             'rating' => $movie->rating
