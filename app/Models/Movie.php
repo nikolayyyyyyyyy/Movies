@@ -66,4 +66,9 @@ class Movie extends Model
     {
         return $this->hasMany(UserMovieReaction::class);
     }
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
 }

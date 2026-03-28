@@ -22,6 +22,10 @@ class MovieController extends Controller
         $movies = Movie::with(['categories', 'actors'])
             ->paginate(8);
 
+        $movies->load(['favorites' => function ($query) {
+            $query->where('user_id', Auth::id());
+        }]);
+
         return Inertia::render('Movies/Index', [
             'movies' => $movies
         ]);
@@ -76,7 +80,7 @@ class MovieController extends Controller
                 'comments.user',
                 'reactions' => function ($query) {
                     $query->where('user_id', Auth::id());
-                },
+                }
             ])
             ->withCount([
                 'reactions as likes_count' => function ($query) {
@@ -92,7 +96,6 @@ class MovieController extends Controller
         $movie->rating = $total > 0
             ? round(((int) $movie->likes_count / $total) * 10, 1) // 0..10
             : 0.0;
-
 
         return Inertia::render('Movies/Show', [
             'movie' => $movie,

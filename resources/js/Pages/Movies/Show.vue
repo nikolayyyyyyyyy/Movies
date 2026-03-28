@@ -107,14 +107,14 @@ onBeforeUnmount(() => {
                             <p class="text-sm text-gray-500">Like</p>
 
                             <HandThumbUpSolidBold @click="likeMovie" class="w-5 h-5 text-white cursor-pointer"
-                                :class="movie.reactions[0]?.reaction === 'like' ? 'text-green-500' : 'text-white'" />
+                                :class="movie.reactions[0]?.reaction === 'like' ? 'text-green-700' : 'text-white'" />
                         </div>
 
                         <div class="flex items-center gap-2">
                             <p class="text-sm text-gray-500">Dislike</p>
 
                             <HandThumbDownSolidBold @click="dislikeMovie" class="w-5 h-5 text-white cursor-pointer"
-                                :class="movie.reactions[0]?.reaction === 'dislike' ? 'text-red-500' : 'text-white'" />
+                                :class="movie.reactions[0]?.reaction == 'dislike' ? 'text-red-700' : 'text-white'" />
                         </div>
                     </div>
 

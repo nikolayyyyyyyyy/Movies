@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, usePage } from '@inertiajs/vue3';
+import { RoleEnum } from '@/Enums/RoleEnum';
 
 const showingNavigationDropdown = ref(false);
 const page = usePage();
@@ -33,8 +34,8 @@ const categories = ref(page.props.categories ?? []);
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink v-if="$page.props.auth.user.role_id == 1" :href="route('movies.create')"
-                                    :active="route().current('movies.create')">
+                                <NavLink v-if="$page.props.auth.user.role_id == RoleEnum.Admin"
+                                    :href="route('movies.create')" :active="route().current('movies.create')">
                                     Create
                                 </NavLink>
 
@@ -64,6 +65,10 @@ const categories = ref(page.props.categories ?? []);
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
+
+                                <NavLink :href="route('favorites.index')" :active="route().current('favorites.index')">
+                                    Favorites
+                                </NavLink>
                             </div>
                         </div>
 
