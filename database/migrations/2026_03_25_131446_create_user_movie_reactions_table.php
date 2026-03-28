@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_movie_reactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('movie_id')->constrained('movies');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('movie_id')->constrained('movies')->onDelete('cascade');
 
             $table->unique(['user_id', 'movie_id']);
             $table->enum('reaction', ['like', 'dislike']);

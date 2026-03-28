@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('iframe_url');
             $table->string('year')->nullable();
             $table->string('duration');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->softDeletes();
         });
     }

@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class MovieController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Movie::class, 'movie');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -96,7 +101,7 @@ class MovieController extends Controller
         $movie->rating = $total > 0
             ? round(((int) $movie->likes_count / $total) * 10, 1) // 0..10
             : 0.0;
-        
+
         return Inertia::render('Movies/Show', [
             'movie' => $movie,
             'rating' => $movie->rating
@@ -108,7 +113,7 @@ class MovieController extends Controller
      */
     public function edit(Movie $movie)
     {
-        //
+        dd($movie->toArray());
     }
 
     /**
@@ -124,6 +129,7 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        //
+        $movie->delete();
+        return redirect()->route('movies.index');
     }
 }
