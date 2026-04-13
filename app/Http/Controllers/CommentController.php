@@ -7,9 +7,15 @@ use App\Events\CommentCreated;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Comment::class, 'comment');
+    }
+
     public function store(StoreCommentRequest $request)
     {
         DB::transaction(function () use ($request) {
@@ -22,6 +28,22 @@ class CommentController extends Controller
             broadcast(new CommentCreated($comment))->toOthers();
         });
 
+        return redirect()
+            ->back();
+    }
+
+    public function destroy(Comment $comment)
+    {
+        $comment->delete();
+        return redirect()
+            ->back();
+    }
+
+    public function update(Comment $comment, Request $request)
+    {
+        $comment->update([
+            'comment' => $request->comment,
+        ]);
         return redirect()
             ->back();
     }

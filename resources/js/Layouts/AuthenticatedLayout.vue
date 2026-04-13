@@ -70,6 +70,11 @@ const categories = ref(page.props.categories ?? []);
                                     :href="route('favorites.index')" :active="route().current('favorites.index')">
                                     Favorites
                                 </NavLink>
+
+                                <NavLink v-if="$page.props.auth.user.role_id == RoleEnum.Admin"
+                                    :href="route('users.index')" :active="route().current('users.index')">
+                                    Users
+                                </NavLink>
                             </div>
                         </div>
 
@@ -175,12 +180,15 @@ const categories = ref(page.props.categories ?? []);
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
                 <div
-                    class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"
-                >
+                    class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
                     <slot name="header" />
 
                     <div class="w-full sm:w-1/2">
                         <slot name="search" />
+                    </div>
+
+                    <div>
+                        <slot name="addUsers" />
                     </div>
                 </div>
             </header>

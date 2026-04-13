@@ -36,7 +36,8 @@ const triggerRateMovie = () => {
 </script>
 
 <template>
-    <div class="flex cursor-pointer flex-col relative" @click="router.visit(route('movies.show', movie.slug))">
+    <div class="flex cursor-pointer flex-col relative transition-transform duration-200 ease-out hover:scale-105"
+        @click="router.visit(route('movies.show', movie.slug))">
         <div class="absolute top-2 right-2 flex flex-col gap-2">
             <PrimaryButton v-if="$page.props.auth.user.role_id == RoleEnum.Admin" class="bg-red-500 text-white"
                 @click.stop.prevent="showDeleteModal = true">

@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
@@ -28,6 +28,12 @@ const updateProfilePicture = () => {
         }
     });
 };
+
+const removeProfilePicture = () => {
+    router.put(route('users.destroy-profile-picture'), {}, {
+        preserveScroll: true
+    })
+}
 </script>
 
 <template>
@@ -45,8 +51,14 @@ const updateProfilePicture = () => {
             </header>
 
             <div class="flex flex-col items-center gap-4">
-                <img :src="user.profile_picture ?? '/images/avatar.png'" alt="Profile Picture"
-                    class="w-20 h-20 md:w-[120px] md:h-[120px] object-cover rounded-md">
+                <div class="relative">
+                    <img :src="user.profile_picture ?? '/images/avatar.png'" alt="Profile Picture"
+                        class="w-20 h-20 md:w-[120px] md:h-[120px] object-cover rounded-md">
+                    <span v-if="user.profile_picture" @click="removeProfilePicture"
+                        class="absolute top-1 right-1 bg-gray-500 px-1 rounded-md cursor-pointer">
+                        X
+                    </span>
+                </div>
 
                 <input @change="handleProfilePictureChange" type="file" id="profile_picture" name="profile_picture"
                     accept="image/*" class="hidden">

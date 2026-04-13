@@ -80,4 +80,14 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.edit');
     }
+
+    public function destroyProfilePicture()
+    {
+        $user = Auth::user();
+
+        $user->profile_picture = null;
+        $user->save();
+
+        return Redirect::back();
+    }
 }

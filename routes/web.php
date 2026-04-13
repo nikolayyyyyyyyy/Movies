@@ -23,6 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/comments', [CommentController::class, 'store'])
         ->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])
+        ->name('comments.destroy');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])
+        ->name('comments.update');
 
     Route::post('/user-movie-reactions', [UserMovieReactionController::class, 'store'])
         ->name('user-movie-reactions.store');
@@ -56,6 +60,8 @@ Route::middleware('auth')->group(function () {
         ->name('profile.update-profile-picture');
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
+    Route::put('/profile/destroy-profile-picture', [ProfileController::class, 'destroyProfilePicture'])
+        ->name('users.destroy-profile-picture');
 });
 
 require __DIR__ . '/auth.php';
