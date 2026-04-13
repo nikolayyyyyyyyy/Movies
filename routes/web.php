@@ -18,7 +18,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class)
         ->scoped(['category' => 'slug']);
 
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)
+        ->except(['create', 'edit']);
     Route::resource('actors', ActorController::class);
 
     Route::post('/comments', [CommentController::class, 'store'])
