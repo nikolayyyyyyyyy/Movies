@@ -24,8 +24,14 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
-        $movies = Movie::with(['categories', 'actors'])
-            ->paginate(8);
+        if ($request->has('search')) {
+            $movies = Movie::where('title', 'like', '%' . $request->search . '%')
+                ->with(['categories', 'actors'])
+                ->paginate(8);
+        } else {
+            $movies = Movie::with(['categories', 'actors'])
+                ->paginate(8);
+        }
 
         $movies->load(['favorites' => function ($query) {
             $query->where('user_id', Auth::id());

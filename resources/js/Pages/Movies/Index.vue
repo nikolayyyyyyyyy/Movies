@@ -1,11 +1,22 @@
 <script setup>
 import MovieCard from '@/Components/MovieCard.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     movies: Object,
 });
+
+const search = ref('');
+
+const searchMovies = () => {
+    router.get(route('movies.index'), {
+        search: search.value
+    });
+}
 </script>
 <template>
 
@@ -16,6 +27,14 @@ defineProps({
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 All Movies
             </h2>
+        </template>
+
+        <template #search>
+            <div class="flex gap-4">
+                <TextInput type="text" class="w-full" v-model="search" placeholder="Search for a movie" />
+
+                <PrimaryButton @click="searchMovies">Search</PrimaryButton>
+            </div>
         </template>
 
         <div class="py-6 sm:py-12">
