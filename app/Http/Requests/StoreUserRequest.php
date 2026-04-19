@@ -31,6 +31,7 @@ class StoreUserRequest extends FormRequest
                 Rule::unique('users')->whereNull('deleted_at')
             ],
             'password' => 'required|min:5',
+            'confirm_password' => 'required|min:5|same:password',
             'role_id' => 'required|exists:roles,id'
         ];
     }

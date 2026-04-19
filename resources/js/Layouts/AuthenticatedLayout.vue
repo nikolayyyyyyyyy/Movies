@@ -9,6 +9,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import { RoleEnum } from '@/Enums/RoleEnum';
 
 const showingNavigationDropdown = ref(false);
+const showingCategories = ref(false);
 const page = usePage();
 const categories = ref(page.props.categories ?? []);
 </script>
@@ -152,6 +153,36 @@ const categories = ref(page.props.categories ?? []);
                         <ResponsiveNavLink :href="route('movies.index')" :active="route().current('movies.index')">
                             Movies
                         </ResponsiveNavLink>
+
+                        <button @click="showingCategories = !showingCategories" class="w-full text-left inline-flex items-center px-4 py-2 border-b border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
+                            Categories
+
+                            <svg class="ms-1 h-4 w-4 transition-transform duration-200" :class="{ 'rotate-180': showingCategories }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <Transition name="slide">
+                            <div v-if="showingCategories" class="space-y-1 pl-4">
+                                <ResponsiveNavLink v-for="category in categories" :key="category.id"
+                                    :href="route('categories.show', category.slug)">
+                                    {{ category.name }}
+                                </ResponsiveNavLink>
+                            </div>
+                        </Transition>
+
+                        <ResponsiveNavLink v-if="$page.props.auth.user.role_id == RoleEnum.User"
+                            :href="route('favorites.index')" :active="route().current('favorites.index')">
+                            Favorites
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink v-if="$page.props.auth.user.role_id == RoleEnum.Admin"
+                            :href="route('users.index')" :active="route().current('users.index')">
+                            Users
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -180,10 +211,10 @@ const categories = ref(page.props.categories ?? []);
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
                 <div
-                    class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-                    <slot name="header" />
+                    class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+                    <slot name="header" class="flex-0" />
 
-                    <div class="w-full sm:w-1/2">
+                    <div class="w-full sm:w-full lg:w-1/2 ml-auto">
                         <slot name="search" />
                     </div>
 
@@ -200,3 +231,17 @@ const categories = ref(page.props.categories ?? []);
         </div>
     </div>
 </template>
+
+<style scoped>
+.slide-enter-active, .slide-leave-active {
+    transition: all 0.3s ease;
+}
+.slide-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.slide-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+</style>

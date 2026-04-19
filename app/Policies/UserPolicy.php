@@ -21,7 +21,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->role_id == RoleEnum::Admin->value;
     }
 
     /**
@@ -37,7 +37,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false;
+        return $user->role_id = RoleEnum::Admin->value;
     }
 
     /**
@@ -53,7 +53,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return false;
+        return $user->role_id == RoleEnum::Admin->value;
     }
 
     /**
@@ -61,6 +61,6 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return false;
+        return $user->role_id == RoleEnum::Admin->value;
     }
 }

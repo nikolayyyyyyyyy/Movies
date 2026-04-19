@@ -35,9 +35,13 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $category, Request $request)
     {
-        $movies = $category->movies()->paginate(8);
+        if ($request->has('search') && !empty($request->search)) {
+            $movies = $category->movies()->where('title', 'like', '%' . $request->search . '%')->paginate(8);
+        } else {
+            $movies = $category->movies()->paginate(8);
+        }
 
         return Inertia::render('Category/Index', [
             'movies' => $movies,

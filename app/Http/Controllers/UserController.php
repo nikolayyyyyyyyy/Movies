@@ -19,9 +19,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')->whereNot('id', Auth::user()->id)->get();
+        if ($request->has('email') && !empty($request->email)) {
+            $users = User::with('role')->where('email', '=', $request->email)->paginate(8);
+        } else {
+            $users = User::with('role')->whereNot('id', Auth::user()->id)->paginate(8);
+        }
+
         $roles = Role::all();
 
         return Inertia::render('User/Index', [
@@ -35,7 +40,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        if(User::withTrashed()->where('email', $request->email)->exists()) {
+        if (User::withTrashed()->where('email', $request->email)->exists()) {
             $user = User::withTrashed()->where('email', $request->email)->first();
             $user->restore();
             $user->update($request->validated());
@@ -46,6 +51,16 @@ class UserController extends Controller
         User::create($request->validated());
 
         return redirect()->back();
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user)
+    {
+        return Inertia::render('User/Show', [
+            'user' => $user
+        ]);
     }
 
     /**
