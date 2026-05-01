@@ -56,14 +56,22 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
+    Route::get('/users/{user:name}/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit-user');
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
+    Route::patch('/users/{user:name}/profile', [ProfileController::class, 'update'])
+        ->name('profile.update-user');
     Route::put('/profile/update-profile-picture', [ProfileController::class, 'updateProfilePicture'])
         ->name('profile.update-profile-picture');
+    Route::put('/users/{user:name}/profile/update-profile-picture', [ProfileController::class, 'updateProfilePicture'])
+        ->name('profile.update-profile-picture-user');
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
     Route::put('/profile/destroy-profile-picture', [ProfileController::class, 'destroyProfilePicture'])
         ->name('users.destroy-profile-picture');
+    Route::put('/users/{user:name}/profile/destroy-profile-picture', [ProfileController::class, 'destroyProfilePicture'])
+        ->name('users.destroy-profile-picture-user');
 });
 
 require __DIR__ . '/auth.php';

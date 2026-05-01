@@ -12,7 +12,9 @@ class UpdateUserProfilePictureRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $targetUser = $this->route('user') ?? $this->user();
+
+        return $this->user()?->can('update', $targetUser) ?? false;
     }
 
     /**

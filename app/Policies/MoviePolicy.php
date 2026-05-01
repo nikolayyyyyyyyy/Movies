@@ -55,4 +55,14 @@ class MoviePolicy
     {
         return $user->role_id == RoleEnum::Admin->value;
     }
+
+    public function favorite(User $user): bool
+    {
+        return $user->role_id == RoleEnum::User->value;
+    }
+
+    public function unfavorite(User $user): bool
+    {
+        return $user->role_id == RoleEnum::User->value;
+    }
 }

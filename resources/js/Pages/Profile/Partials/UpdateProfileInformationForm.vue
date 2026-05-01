@@ -3,22 +3,37 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 
-defineProps({
+const props = defineProps({
     mustVerifyEmail: {
         type: Boolean,
     },
     status: {
         type: String,
     },
+    targetUser: {
+        type: Object,
+        required: true,
+    },
+    profileUpdateRoute: {
+        type: String,
+        required: true,
+    },
+    roles: {
+        type: Array,
+        required: true,
+    },
+    canManageRole: {
+        type: Boolean,
+        required: true,
+    },
 });
 
-const user = usePage().props.auth.user;
-
 const form = useForm({
-    name: user.name,
-    email: user.email,
+    name: props.targetUser.name,
+    email: props.targetUser.email,
+    role_id: props.targetUser.role_id,
 });
 </script>
 
@@ -35,7 +50,7 @@ const form = useForm({
         </header>
 
         <form
-            @submit.prevent="form.patch(route('profile.update'))"
+            @submit.prevent="form.patch(props.profileUpdateRoute)"
             class="mt-6 space-y-6"
         >
             <div>
@@ -69,7 +84,25 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
+            <div v-if="props.canManageRole">
+                <InputLabel for="role_id" value="Role" />
+
+                <select
+                    id="role_id"
+                    v-model="form.role_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    required
+                >
+                    <option value="" disabled>Select role</option>
+                    <option v-for="role in props.roles" :key="role.id" :value="role.id">
+                        {{ role.name }}
+                    </option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.role_id" />
+            </div>
+
+            <div v-if="props.mustVerifyEmail && props.targetUser.email_verified_at === null">
                 <p class="mt-2 text-sm text-gray-800">
                     Your email address is unverified.
                     <Link
@@ -83,7 +116,7 @@ const form = useForm({
                 </p>
 
                 <div
-                    v-show="status === 'verification-link-sent'"
+                    v-show="props.status === 'verification-link-sent'"
                     class="mt-2 text-sm font-medium text-green-600"
                 >
                     A new verification link has been sent to your email address.

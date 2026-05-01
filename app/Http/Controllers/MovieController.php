@@ -24,21 +24,66 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('search')) {
-            $movies = Movie::where('title', 'like', '%' . $request->search . '%')
-                ->with(['categories', 'actors'])
-                ->paginate(8);
-        } else {
-            $movies = Movie::with(['categories', 'actors'])
-                ->paginate(8);
+        $query = Movie::query()
+            ->with(['categories', 'actors']);
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->string('search') . '%');
         }
+
+        $sort = $request->string('sort')->toString() ?? 'title';
+        switch ($sort) {
+            case 'year':
+                $query->orderBy('year', 'asc');
+                break;
+            case 'year_desc':
+                $query->orderBy('year', 'desc');
+                break;
+            case 'rating':
+                $query
+                    ->withCount([
+                        'reactions as likes_count' => function ($q) {
+                            $q->where('reaction', 'like');
+                        },
+                        'reactions as dislikes_count' => function ($q) {
+                            $q->where('reaction', 'dislike');
+                        },
+                    ])
+                    ->orderByRaw(
+                        '(CASE WHEN (likes_count + dislikes_count) > 0 THEN (likes_count * 1.0 / (likes_count + dislikes_count)) ELSE 0 END) asc'
+                    );
+                break;
+            case 'rating_desc':
+                $query
+                    ->withCount([
+                        'reactions as likes_count' => function ($q) {
+                            $q->where('reaction', 'like');
+                        },
+                        'reactions as dislikes_count' => function ($q) {
+                            $q->where('reaction', 'dislike');
+                        },
+                    ])
+                    ->orderByRaw(
+                        '(CASE WHEN (likes_count + dislikes_count) > 0 THEN (likes_count * 1.0 / (likes_count + dislikes_count)) ELSE 0 END) desc'
+                    );
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            default:
+                $query->orderBy('title', 'asc');
+                break;
+        }
+
+        $movies = $query->paginate(8)->withQueryString();
 
         $movies->load(['favorites' => function ($query) {
             $query->where('user_id', Auth::id());
         }]);
 
         return Inertia::render('Movies/Index', [
-            'movies' => $movies
+            'movies' => $movies,
+            'sort' => $sort
         ]);
     }
 
@@ -103,9 +148,9 @@ class MovieController extends Controller
             ])
             ->findOrFail($movie->id);
 
-        $total = (int) $movie->likes_count + (int) $movie->dislikes_count;
+        $total = $movie->likes_count + $movie->dislikes_count;
         $movie->rating = $total > 0
-            ? round(((int) $movie->likes_count / $total) * 10, 1) // 0..10
+            ? round(($movie->likes_count / $total) * 10, 1) // 0..10
             : 0.0;
 
         return Inertia::render('Movies/Show', [

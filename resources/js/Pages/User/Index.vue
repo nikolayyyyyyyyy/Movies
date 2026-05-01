@@ -53,9 +53,7 @@ const handleDeleteUser = () => {
 }
 
 const handleEditUser = (user) => {
-    console.log(user.name);
-
-    router.get(route('users.show', { user: user.name }));
+    router.get(route('profile.edit-user', { user: user.name }));
 }
 
 const userToSearch = ref('');

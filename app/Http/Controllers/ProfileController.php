@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\UpdateUserProfilePictureRequest;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,28 +20,48 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request, ?User $user = null): Response
     {
+        $targetUser = $user ?? $request->user();
+        $this->authorize('update', $targetUser);
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'targetUser' => $targetUser,
+            'isOwnProfile' => $request->user()->is($targetUser),
+            'profileUpdateRoute' => $user
+                ? route('profile.update-user', ['user' => $targetUser->name])
+                : route('profile.update'),
+            'profilePictureUpdateRoute' => $user
+                ? route('profile.update-profile-picture-user', ['user' => $targetUser->name])
+                : route('profile.update-profile-picture'),
+            'profilePictureDestroyRoute' => $user
+                ? route('users.destroy-profile-picture-user', ['user' => $targetUser->name])
+                : route('users.destroy-profile-picture'),
+            'roles' => Role::all(),
+            'canManageRole' => $request->user()->can('create', User::class),
         ]);
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request, ?User $user = null): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $targetUser = $user ?? $request->user();
+        $this->authorize('update', $targetUser);
+        $targetUser->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($targetUser->isDirty('email')) {
+            $targetUser->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $targetUser->save();
 
-        return Redirect::route('profile.edit');
+        return $user
+            ? Redirect::route('profile.edit-user', ['user' => $targetUser->name])
+            : Redirect::route('profile.edit');
     }
 
     /**
@@ -47,6 +69,8 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $this->authorize('delete', $request->user());
+
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
@@ -66,27 +90,33 @@ class ProfileController extends Controller
     /**
      * Update the user's profile picture.
      */
-    public function updateProfilePicture(UpdateUserProfilePictureRequest $request): RedirectResponse
+    public function updateProfilePicture(UpdateUserProfilePictureRequest $request, ?User $user = null): RedirectResponse
     {
-        if ($request->user()->profile_picture) {
-            $path = $request->user()->getRawOriginal('profile_picture');
+        $targetUser = $user ?? $request->user();
+        $this->authorize('update', $targetUser);
+
+        if ($targetUser->profile_picture) {
+            $path = $targetUser->getRawOriginal('profile_picture');
             Storage::disk('public')->delete($path);
         }
 
-        $request->user()->update([
+        $targetUser->update([
             'profile_picture' => $request->file('profile_picture')->store('profile_pictures', 'public'),
         ]);
-        $request->user()->refresh();
+        $targetUser->refresh();
 
-        return redirect()->route('profile.edit');
+        return $user
+            ? redirect()->route('profile.edit-user', ['user' => $targetUser->name])
+            : redirect()->route('profile.edit');
     }
 
-    public function destroyProfilePicture()
+    public function destroyProfilePicture(Request $request, ?User $user = null)
     {
-        $user = Auth::user();
+        $targetUser = $user ?? $request->user();
+        $this->authorize('update', $targetUser);
 
-        $user->profile_picture = null;
-        $user->save();
+        $targetUser->profile_picture = null;
+        $targetUser->save();
 
         return Redirect::back();
     }

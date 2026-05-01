@@ -154,11 +154,13 @@ const categories = ref(page.props.categories ?? []);
                             Movies
                         </ResponsiveNavLink>
 
-                        <button @click="showingCategories = !showingCategories" class="w-full text-left inline-flex items-center px-4 py-2 border-b border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
+                        <button @click="showingCategories = !showingCategories"
+                            class="w-full text-left inline-flex items-center px-4 py-2 border-b border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
                             Categories
 
-                            <svg class="ms-1 h-4 w-4 transition-transform duration-200" :class="{ 'rotate-180': showingCategories }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor">
+                            <svg class="ms-1 h-4 w-4 transition-transform duration-200"
+                                :class="{ 'rotate-180': showingCategories }" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
                                     d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
                                     clip-rule="evenodd" />
@@ -226,20 +228,25 @@ const categories = ref(page.props.categories ?? []);
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div>
+                    <slot />
+                </div>
             </main>
         </div>
     </div>
 </template>
 
 <style scoped>
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
     transition: all 0.3s ease;
 }
+
 .slide-enter-from {
     opacity: 0;
     transform: translateY(-10px);
 }
+
 .slide-leave-to {
     opacity: 0;
     transform: translateY(-10px);

@@ -10,11 +10,11 @@ const props = defineProps({
     movies: Object,
     category: Object,
 });
-
+const currentRoute = route().current();
 const search = ref('');
 
 const searchMovies = () => {
-    router.get(route('categories.show', { slug: props.category.slug }), {
+    router.get(currentRoute, {
         search: search.value
     });
 }

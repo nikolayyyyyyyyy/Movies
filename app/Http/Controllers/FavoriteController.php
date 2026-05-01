@@ -16,6 +16,8 @@ class FavoriteController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('favorite', Movie::class);
+
         $user = User::find(Auth::user()->id);
         $favoriteMovies = $user->favorites;
 
@@ -41,6 +43,8 @@ class FavoriteController extends Controller
      */
     public function storeOrDestroy(StoreFavoriteRequest $request)
     {
+        $this->authorize('unfavorite', Movie::class);
+        
         $user = User::find(Auth::user()->id);
         if ($user->favorites()->where('movie_id', $request->movie_id)->exists()) {
             $user->favorites()->detach($request->movie_id);

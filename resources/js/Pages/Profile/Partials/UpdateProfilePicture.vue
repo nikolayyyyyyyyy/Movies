@@ -1,11 +1,24 @@
 <script setup>
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
-const page = usePage();
 
-const user = computed(() => page.props.auth.user);
+const props = defineProps({
+    targetUser: {
+        type: Object,
+        required: true,
+    },
+    profilePictureUpdateRoute: {
+        type: String,
+        required: true,
+    },
+    profilePictureDestroyRoute: {
+        type: String,
+        required: true,
+    },
+});
+const user = computed(() => props.targetUser);
 const form = useForm({
     profile_picture: null,
 });
@@ -25,7 +38,7 @@ const onFileChange = (e) => {
 };
 
 const updateProfilePicture = () => {
-    form.put(route('profile.update-profile-picture'), {
+    form.put(props.profilePictureUpdateRoute, {
         onSuccess: () => {
             form.reset();
         }
@@ -33,7 +46,7 @@ const updateProfilePicture = () => {
 };
 
 const removeProfilePicture = () => {
-    router.put(route('users.destroy-profile-picture'), {}, {
+    router.put(props.profilePictureDestroyRoute, {}, {
         preserveScroll: true,
         preserveState: false
     })

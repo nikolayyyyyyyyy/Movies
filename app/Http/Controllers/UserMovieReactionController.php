@@ -25,6 +25,16 @@ class UserMovieReactionController extends Controller
             return redirect()->back();
         }
 
+        if ($isUserReacted->reaction == 'like' && $request->reaction == 'like') {
+            $isUserReacted->delete();
+            return redirect()->back();
+        }
+
+        if ($isUserReacted->reaction == 'dislike' && $request->reaction == 'dislike') {
+            $isUserReacted->delete();
+            return redirect()->back();
+        }
+
         $isUserReacted->update([
             'reaction' => $request->reaction,
         ]);
