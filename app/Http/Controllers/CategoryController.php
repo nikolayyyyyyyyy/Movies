@@ -37,15 +37,59 @@ class CategoryController extends Controller
      */
     public function show(Category $category, Request $request)
     {
-        if ($request->has('search') && !empty($request->search)) {
-            $movies = $category->movies()->where('title', 'like', '%' . $request->search . '%')->paginate(8);
-        } else {
-            $movies = $category->movies()->paginate(8);
+        $query = $category->movies();
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->string('search') . '%');
         }
+
+        $sort = $request->string('sort');
+        switch ($sort) {
+            case 'year':
+                $query->orderBy('year', 'asc');
+                break;
+            case 'year_desc':
+                $query->orderBy('year', 'desc');
+                break;
+            case 'rating':
+                $query
+                    ->withCount([
+                        'reactions as likes_count' => function ($q) {
+                            $q->where('reaction', 'like');
+                        },
+                        'reactions as dislikes_count' => function ($q) {
+                            $q->where('reaction', 'dislike');
+                        },
+                    ])
+                    ->orderByRaw(
+                        '(CASE WHEN (likes_count + dislikes_count) > 0 THEN (likes_count * 1.0 / (likes_count + dislikes_count)) ELSE 0 END) asc'
+                    );
+                break;
+            case 'rating_desc':
+                $query
+                    ->withCount([
+                        'reactions as likes_count' => function ($q) {
+                            $q->where('reaction', 'like');
+                        },
+                        'reactions as dislikes_count' => function ($q) {
+                            $q->where('reaction', 'dislike');
+                        },
+                    ])
+                    ->orderByRaw(
+                        '(CASE WHEN (likes_count + dislikes_count) > 0 THEN (likes_count * 1.0 / (likes_count + dislikes_count)) ELSE 0 END) desc'
+                    );
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+        }
+
+        $movies = $query->paginate(8)->withQueryString();
 
         return Inertia::render('Category/Index', [
             'movies' => $movies,
-            'category' => $category
+            'category' => $category,
+            'sort' => $sort
         ]);
     }
 

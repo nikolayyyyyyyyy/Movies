@@ -20,6 +20,7 @@ class Movie extends Model
         'iframe_url',
         'year',
         'duration',
+        'user_id',
     ];
 
     public function getRouteKeyName(): string

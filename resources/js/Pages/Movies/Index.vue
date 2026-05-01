@@ -37,7 +37,6 @@ const sortMovies = (sortBy) => {
     <Head title="Movies" />
 
     <AuthenticatedLayout>
-        {{ sort }}
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 All Movies
@@ -54,7 +53,7 @@ const sortMovies = (sortBy) => {
 
         <div class="py-6 sm:py-12">
             <div v-if="movies.data.length > 0" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-end mb-6">
+                <div v-if="movies.data.length > 1" class="flex justify-end mb-6">
                     <SortMovie @sortMovies="sortMovies" :sortBy="sort" />
                 </div>
 

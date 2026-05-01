@@ -1,14 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 const props = defineProps({
     sortBy: {
         type: String,
-        default: 'title',
+        default: '',
     },
 });
-const selectedSort = ref('');
+const selectedSort = ref(props.sortBy || '');
 const isOpen = ref(false);
 const emit = defineEmits(['sortMovies']);
+
+watch(
+    () => props.sortBy,
+    (newSort) => {
+        selectedSort.value = newSort || '';
+    }
+);
 
 const onChange = () => {
     isOpen.value = false;

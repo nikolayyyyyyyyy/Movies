@@ -159,13 +159,13 @@ const filterUsers = () => {
 
                     <div class="flex flex-col">
                         <InputLabel value="Password" />
-                        <TextInput v-model="createUserForm.password" placeholder="Enter password" />
+                        <TextInput v-model="createUserForm.password" placeholder="Enter password" type="password" />
                         <InputError :message="createUserForm.errors.password" />
                     </div>
 
                     <div class="flex flex-col">
                         <InputLabel value="Confirm password" />
-                        <TextInput v-model="createUserForm.confirm_password" placeholder="Repeat password" />
+                        <TextInput v-model="createUserForm.confirm_password" placeholder="Repeat password" type="password" />
                         <InputError :message="createUserForm.errors.confirm_password" />
                     </div>
 

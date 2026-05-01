@@ -1,6 +1,7 @@
 <script setup>
 import MovieCard from '@/Components/MovieCard.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SortMovie from '@/Components/SortMovie.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
@@ -9,13 +10,26 @@ import { ref } from 'vue';
 const props = defineProps({
     movies: Object,
     category: Object,
+    sort: String
 });
-const currentRoute = route().current();
 const search = ref('');
 
 const searchMovies = () => {
-    router.get(currentRoute, {
-        search: search.value
+    router.reload({
+        data: {
+            search: search.value
+        },
+        onFinish: () => {
+            search.value = '';
+        }
+    });
+}
+
+const sortMovies = (sortBy) => {
+    router.reload({
+        data: {
+            sort: sortBy
+        }
     });
 }
 </script>
@@ -38,7 +52,9 @@ const searchMovies = () => {
 
         <div class="py-6 sm:py-12">
             <div v-if="movies.data.length > 0" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
+                <div v-if="movies.data.length > 1" class="flex justify-end mb-6">
+                    <SortMovie @sortMovies="sortMovies" :sortBy="sort" />
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                     <MovieCard v-for="movie in movies.data" :key="movie.id" :movie="movie" />
                 </div>

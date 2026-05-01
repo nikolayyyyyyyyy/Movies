@@ -106,7 +106,7 @@ const searchActors = () => {
                                         </div>
                                         <template v-else>
                                             <span class="truncate text-sm font-medium text-gray-700">{{ selectedFileName
-                                            }}</span>
+                                                }}</span>
                                             <button type="button"
                                                 class="w-fit text-sm text-indigo-600 hover:text-indigo-500"
                                                 @click="clearPicture">
@@ -171,7 +171,7 @@ const searchActors = () => {
             </div>
         </div>
 
-        <DialogModal :show="displayAddActorsModal" @close="displayAddActorsModal = false, createMovie.actors = []">
+        <DialogModal :show="displayAddActorsModal" @close="displayAddActorsModal = false">
             <template #title>
                 Add Actors
             </template>
@@ -192,7 +192,7 @@ const searchActors = () => {
                                 class="actors-list-scroll flex max-h-[min(50vh,320px)] min-h-[120px] flex-col gap-0.5 overflow-y-auto overflow-x-hidden">
                                 <label v-for="actor in actors" :key="actor.id"
                                     class="actor-row flex cursor-pointer items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-white hover:shadow-sm focus-within:bg-white focus-within:shadow-sm sm:gap-4 sm:px-3">
-                                    <Checkbox v-model:checked="createMovie.actors" :value="actor.name"
+                                    <Checkbox v-model:checked="createMovie.actors" :value="actor.id"
                                         class="flex-shrink-0" />
                                     <img :src="actor.profile_picture" alt=""
                                         class="h-10 w-10 flex-shrink-0 rounded-full object-cover ring-1 ring-gray-200 sm:h-11 sm:w-11" />

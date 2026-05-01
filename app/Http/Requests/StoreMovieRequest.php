@@ -25,7 +25,7 @@ class StoreMovieRequest extends FormRequest
         return [
             'title' => 'required|max:255',
             'slug' => 'required|unique:movies,slug',
-            'description' => 'nullable|max:500',
+            'description' => 'nullable|max:5000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'iframe_url' => 'required|url',
             'year' => 'nullable|numeric|min:1800',

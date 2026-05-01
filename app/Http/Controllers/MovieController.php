@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Services\ActorService;
 use App\Http\Requests\StoreMovieRequest;
+use App\Http\Requests\UpdateMovieRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class MovieController extends Controller
             $query->where('title', 'like', '%' . $request->string('search') . '%');
         }
 
-        $sort = $request->string('sort')->toString() ?? 'title';
+        $sort = $request->string('sort');
         switch ($sort) {
             case 'year':
                 $query->orderBy('year', 'asc');
@@ -114,12 +115,14 @@ class MovieController extends Controller
                 'iframe_url' => $request->iframe_url,
                 'year' => $request->year,
                 'duration' => $request->duration,
+                'user_id' => Auth::id(),
             ]);
 
             $movie->categories()->attach($request->categories ?? []);
+            $movie->actors()->attach($request->actors ?? []);
 
             return redirect()
-                ->route('movies.show', ['movie' => $movie->id]);
+                ->route('movies.show', ['movie' => $movie->slug]);
         });
     }
 
@@ -164,15 +167,44 @@ class MovieController extends Controller
      */
     public function edit(Movie $movie)
     {
-        dd($movie->toArray());
+        $movie->load(['categories', 'actors']);
+        $categories = Category::orderBy('name', 'asc')->get();
+
+        return Inertia::render('Movies/Edit', [
+            'movie' => $movie,
+            'categories' => $categories,
+            'actors' => ActorService::searchActors(null) ?? [],
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Movie $movie)
+    public function update(UpdateMovieRequest $request, Movie $movie): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        $imagePath = $movie->getRawOriginal('image');
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('movies_images', 'public');
+        } elseif (($validated['remove_image'] ?? false) === true) {
+            $imagePath = null;
+        }
+
+        $movie->update([
+            'title' => $validated['title'],
+            'slug' => $validated['slug'],
+            'description' => $validated['description'] ?? null,
+            'image' => $imagePath,
+            'iframe_url' => $validated['iframe_url'],
+            'year' => $validated['year'] ?? null,
+            'duration' => $validated['duration'],
+        ]);
+
+        $movie->categories()->sync($validated['categories']);
+        $movie->actors()->sync($validated['actors'] ?? []);
+
+        return redirect()->route('movies.index');
     }
 
     /**
