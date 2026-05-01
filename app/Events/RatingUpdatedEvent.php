@@ -14,6 +14,10 @@ class RatingUpdatedEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public function __construct(public int $movieId)
+    {
+    }
+
     public function broadcastAs(): string
     {
         return 'rating.updated';
@@ -27,7 +31,7 @@ class RatingUpdatedEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('movie_rating')
+            new Channel('movie_rating.' . $this->movieId)
         ];
     }
 }

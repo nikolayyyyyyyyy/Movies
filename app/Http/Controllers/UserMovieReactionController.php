@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UserMovieReactionController extends Controller
 {
+    private function broadcastRatingUpdate(int $movieId): void
+    {
+        broadcast(new RatingUpdatedEvent($movieId))->toOthers();
+    }
+
     public function store(Request $request)
     {
         $isUserReacted = UserMovieReaction::where('user_id', Auth::user()->id)
@@ -22,16 +27,19 @@ class UserMovieReactionController extends Controller
                 'reaction' => $request->reaction,
             ]);
 
+            $this->broadcastRatingUpdate((int) $request->movie_id);
             return redirect()->back();
         }
 
         if ($isUserReacted->reaction == 'like' && $request->reaction == 'like') {
             $isUserReacted->delete();
+            $this->broadcastRatingUpdate((int) $request->movie_id);
             return redirect()->back();
         }
 
         if ($isUserReacted->reaction == 'dislike' && $request->reaction == 'dislike') {
             $isUserReacted->delete();
+            $this->broadcastRatingUpdate((int) $request->movie_id);
             return redirect()->back();
         }
 
@@ -39,7 +47,7 @@ class UserMovieReactionController extends Controller
             'reaction' => $request->reaction,
         ]);
 
-        broadcast(new RatingUpdatedEvent())->toOthers();
+        $this->broadcastRatingUpdate((int) $request->movie_id);
         return redirect()->back();
     }
 }

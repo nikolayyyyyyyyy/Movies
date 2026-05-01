@@ -122,15 +122,31 @@ onMounted(() => {
             comments.value.push(e.comment);
         }
     });
+    
+    Echo.channel('movie.' + props.movie.id).listen('.comment.updated', (e) => {
+        if (!e.comment?.id) return;
+        const idx = comments.value.findIndex((c) => c.id === e.comment.id);
+        if (idx === -1) return;
+        comments.value[idx] = e.comment;
+    });
 
-    Echo.channel('movie_rating').listen('.rating.updated', (e) => {
+    Echo.channel('movie.' + props.movie.id).listen('.comment.deleted', (e) => {
+        if (!e.comment_id) return;
+        const deletedId = Number(e.comment_id);
+        comments.value = comments.value.filter((c) => Number(c.id) !== deletedId);
+        if (Number(editingCommentId.value) === deletedId) {
+            cancelEditComment();
+        }
+    });
+
+    Echo.channel('movie_rating.' + props.movie.id).listen('.rating.updated', () => {
         router.reload({ only: ['rating'] });
     });
 });
 
 onBeforeUnmount(() => {
     Echo.leave('movie.' + props.movie.id);
-    Echo.leave('movie_rating');
+    Echo.leave('movie_rating.' + props.movie.id);
 });
 </script>
 <template>

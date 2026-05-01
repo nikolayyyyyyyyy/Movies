@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
+use App\Events\CommentDeleted;
 use App\Events\CommentCreated;
+use App\Events\CommentUpdated;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +36,7 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
+        broadcast(new CommentDeleted($comment))->toOthers();
         $comment->delete();
         return redirect()
             ->back();
@@ -44,6 +47,8 @@ class CommentController extends Controller
         $comment->update([
             'comment' => $request->comment,
         ]);
+
+        broadcast(new CommentUpdated($comment))->toOthers();
         return redirect()
             ->back();
     }
