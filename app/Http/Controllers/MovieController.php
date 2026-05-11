@@ -187,8 +187,8 @@ class MovieController extends Controller
         $imagePath = $movie->getRawOriginal('image');
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('movies_images', 'public');
-        } elseif (($validated['remove_image'] ?? false) === true) {
-            $imagePath = null;
+        } else if ($validated['remove_image'] == true) {
+            $imagePath = '';
         }
 
         $movie->update([

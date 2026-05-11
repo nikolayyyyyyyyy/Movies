@@ -59,9 +59,8 @@ const triggerRateMovie = () => {
             @click.stop.prevent="triggerRateMovie">
             <Star class="w-6 h-6" :class="{ 'text-yellow-400': movie.favorites?.length > 0 }" />
         </button>
-
         <div class="flex flex-col">
-            <img :src="movie.image" :alt="movie.title" class="h-80 w-full rounded-md object-cover">
+            <img :src="movie.image || '/images/movie_placeholder.jpg'" :alt="movie.title" class="h-80 w-full rounded-md object-cover">
             <h3 class="text-center text-lg font-bold">{{ movie.title }}</h3>
         </div>
     </div>

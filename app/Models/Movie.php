@@ -39,7 +39,7 @@ class Movie extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => asset($value),
+            get: fn ($value) => filled($value) ? asset($value) : null,
         );
     }
 
